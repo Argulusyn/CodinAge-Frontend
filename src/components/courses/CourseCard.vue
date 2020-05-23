@@ -1,6 +1,6 @@
 <template>
-  <v-card>
-    <v-img height="250" :src="course.previewImage"></v-img>
+  <v-card @click="openCourse">
+    <v-img v-if="course.previewImage" height="250" :src="course.previewImage" />
 
     <v-card-title class="course-name pb-0 mb-4">{{ course.name }}</v-card-title>
 
@@ -29,6 +29,13 @@
         {{ course.description }}
       </div>
     </v-card-text>
+
+    <v-card-actions v-if="displayDeleteButton">
+      <v-spacer />
+      <v-btn icon @click.stop="deleteCourse">
+        <v-icon color="grey lighten-1">mdi-delete</v-icon>
+      </v-btn>
+    </v-card-actions>
   </v-card>
 </template>
 
@@ -39,10 +46,27 @@ export default {
     course: {
       type: Object,
       required: true
+    },
+    displayDeleteButton: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {};
+  },
+  computed: {
+    courseId() {
+      return this.course.id;
+    }
+  },
+  methods: {
+    openCourse() {
+      this.$emit("open-course", this.courseId);
+    },
+    deleteCourse() {
+      this.$emit("delete-course", this.courseId);
+    }
   }
 };
 </script>

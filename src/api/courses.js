@@ -9,4 +9,12 @@ const updateCourse = (courseId, courseData) =>
 
 const getCourses = () => client.get("courses");
 
-export { createCourse, getCourseById, updateCourse, getCourses };
+const deleteCourseById = courseId => client.delete(`courses/${courseId}`);
+
+export {
+  createCourse,
+  getCourseById,
+  updateCourse,
+  getCourses,
+  deleteCourseById
+};

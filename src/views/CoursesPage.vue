@@ -22,7 +22,9 @@
           :key="course.id"
           class="cursor-pointer"
           :course="course"
-          @click.native="openCourse(course)"
+          :display-delete-button="isAdministrator"
+          @open-course="openCourse"
+          @delete-course="deleteCourse"
         />
       </v-container>
     </v-container>
@@ -36,7 +38,7 @@ import CourseCard from "@/components/courses/CourseCard.vue";
 import NewCourseModal from "@/components/courses/NewCourseModal.vue";
 
 import { types } from "@/store/types.js";
-import { getCourses } from "@/api/courses.js";
+import { deleteCourseById, getCourses } from "@/api/courses.js";
 import { USER_ROLES } from "@/constants/common.js";
 
 export default {
@@ -60,13 +62,20 @@ export default {
       return this.userRole === USER_ROLES.ADMINISTRATOR;
     }
   },
-  async mounted() {
-    const { data: courses } = await getCourses();
-    this.courses = courses;
+  mounted() {
+    this.loadCourses();
   },
   methods: {
-    openCourse({ id: courseId }) {
+    async loadCourses() {
+      const { data: courses } = await getCourses();
+      this.courses = courses;
+    },
+    openCourse(courseId) {
       this.$router.push({ name: "CourseDetails", params: { courseId } });
+    },
+    async deleteCourse(courseId) {
+      await deleteCourseById(courseId);
+      await this.loadCourses();
     },
     logout() {
       localStorage.clear();
