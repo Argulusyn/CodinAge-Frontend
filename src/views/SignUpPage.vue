@@ -67,8 +67,11 @@
 </template>
 
 <script>
+import { mapMutations } from "vuex";
+
 import { registerUser } from "@/api/authentication";
 
+import { types } from "@/store/types.js";
 import { VALIDATION_RULES } from "@/constants/common";
 
 export default {
@@ -85,14 +88,24 @@ export default {
     };
   },
   methods: {
-    onSignUpClick() {
-      registerUser({
+    ...mapMutations({
+      setUser: types.mutations.SET_USER
+    }),
+    async onSignUpClick() {
+      const { data: userDetails } = await registerUser({
         username: this.login,
         password: this.password,
         email: this.email,
         firstName: this.firstName,
         lastName: this.lastName
       });
+
+      if (!userDetails) {
+        return;
+      }
+
+      this.setUser(userDetails);
+      await this.$router.push({ name: "Courses" });
     }
   }
 };

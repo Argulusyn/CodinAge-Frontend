@@ -10,3 +10,7 @@ export default {
   components: {}
 };
 </script>
+
+<style lang="scss">
+@import "assets/scss/styles";
+</style>

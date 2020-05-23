@@ -9,4 +9,10 @@ const VALIDATION_RULES = {
   email: value => EMAIL_REGEXP.test(value) || "Invalid e-mail."
 };
 
-export { STORAGE_KEY, VALIDATION_RULES };
+const USER_ROLES = {
+  USER: "USER",
+  MODERATOR: "MODERATOR",
+  ADMINISTRATOR: "ADMINISTRATOR"
+};
+
+export { STORAGE_KEY, VALIDATION_RULES, USER_ROLES };
