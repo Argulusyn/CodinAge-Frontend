@@ -11,10 +11,14 @@ const getCourses = () => client.get("courses");
 
 const deleteCourseById = courseId => client.delete(`courses/${courseId}`);
 
+const finishCourse = (courseId, finishCourseData) =>
+  client.post(`courses/finish/${courseId}`, finishCourseData);
+
 export {
   createCourse,
   getCourseById,
   updateCourse,
   getCourses,
-  deleteCourseById
+  deleteCourseById,
+  finishCourse
 };

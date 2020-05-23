@@ -16,13 +16,16 @@
         </v-list>
 
         <v-spacer />
-        <v-btn
+        <finish-course-modal
           v-if="isCurrentLasSection"
-          color="primary"
-          @click="completeCourse"
+          @rate-course="completeCourse"
         >
-          Complete
-        </v-btn>
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" v-on="on">
+              Complete
+            </v-btn>
+          </template>
+        </finish-course-modal>
       </v-container>
     </v-navigation-drawer>
 
@@ -40,11 +43,14 @@
 
 <script>
 import { get } from "lodash";
+import { mapGetters } from "vuex";
 
 import ArticleSection from "@/components/courses/sections/ArticleSection.vue";
+import FinishCourseModal from "@/components/courses/FinishCourseModal.vue";
 
-import { getCourseById, updateCourse } from "@/api/courses";
+import { finishCourse, getCourseById } from "@/api/courses";
 
+import { types } from "@/store/types.js";
 import { COURSE_SECTION } from "@/constants/courses";
 
 const SECTION_COMPONENTS = {
@@ -53,7 +59,7 @@ const SECTION_COMPONENTS = {
 
 export default {
   name: "EditDetailsPage",
-  components: { ArticleSection },
+  components: { FinishCourseModal, ArticleSection },
   props: {
     courseId: {
       type: [String, Number],
@@ -67,6 +73,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      userId: types.getters.USER_ID
+    }),
     course() {
       return this.courseData || {};
     },
@@ -98,8 +107,12 @@ export default {
     selectSection(index) {
       this.currentSectionIndex = index;
     },
-    async completeCourse() {
-      await updateCourse(this.course.id, this.course);
+    async completeCourse(rating) {
+      await finishCourse(this.course.id, {
+        userId: this.userId,
+        rating
+      });
+
       await this.$router.push({ name: "Courses" });
     }
   }

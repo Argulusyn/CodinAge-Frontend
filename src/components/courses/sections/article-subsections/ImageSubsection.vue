@@ -8,7 +8,7 @@
       :src="subsection.source"
       :alt="subsection.caption"
     />
-    <p v-if="value.caption">{{ value.caption }}</p>
+    <p v-if="subsection.caption">{{ subsection.caption }}</p>
   </div>
 </template>
 

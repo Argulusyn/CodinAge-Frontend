@@ -2,6 +2,7 @@
   <v-container class="article-section-edit-container mt-10">
     <h2 class="title">{{ section.title }}</h2>
     <p>{{ section.description }}</p>
+    <v-divider class="mb-4" />
 
     <div class="subsections">
       <component

@@ -8,7 +8,7 @@
           <v-card-title class="justify-center" primary-title>
             CodinAge
           </v-card-title>
-          <v-form class="d-flex flex-column align-stretch">
+          <v-form ref="loginForm" class="d-flex flex-column align-stretch">
             <v-text-field
               v-model="login"
               :rules="[rules.required]"
@@ -26,6 +26,7 @@
               hint="At least 8 characters"
               @click:append="showPassword = !showPassword"
             />
+            <p v-if="error" class="error--text body-2">{{ error }}</p>
           </v-form>
           <v-card-actions class="justify-space-between px-0">
             <v-btn @click="redirectToSignUp" class="mr-12">Sign Up</v-btn>
@@ -67,6 +68,12 @@ export default {
       loginUser: types.actions.LOGIN
     }),
     async onLoginClick() {
+      this.error = "";
+
+      if (!this.$refs.loginForm.validate()) {
+        return;
+      }
+
       try {
         await this.loginUser({
           username: this.login,

@@ -8,7 +8,7 @@
           <v-card-title class="justify-center" primary-title>
             Sign Up
           </v-card-title>
-          <v-form class="d-flex flex-column align-stretch">
+          <v-form ref="signUpForm" class="d-flex flex-column align-stretch">
             <v-text-field
               v-model="login"
               :rules="[rules.required, rules.loginLengthMin]"
@@ -92,6 +92,10 @@ export default {
       setUser: types.mutations.SET_USER
     }),
     async onSignUpClick() {
+      if (!this.$refs.signUpForm.validate()) {
+        return;
+      }
+
       const { data: userDetails } = await registerUser({
         username: this.login,
         password: this.password,

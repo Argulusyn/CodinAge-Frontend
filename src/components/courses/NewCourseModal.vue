@@ -9,7 +9,7 @@
       </v-card-title>
       <v-card-text>
         <v-container class="px-5">
-          <v-form @submit.prevent="createNewCourse">
+          <v-form ref="newCourseForm" @submit.prevent="createNewCourse">
             <v-text-field
               v-model="courseName"
               type="text"
@@ -104,6 +104,10 @@ export default {
   },
   methods: {
     async createNewCourse() {
+      if (!this.$refs.newCourseForm.validate()) {
+        return;
+      }
+
       const previewImage =
         this.previewImage && (await toBase64(this.previewImage));
 
